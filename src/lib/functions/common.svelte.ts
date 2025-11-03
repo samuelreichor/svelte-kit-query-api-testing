@@ -3,7 +3,6 @@ import { browser } from '$app/environment';
 import { getRequestEvent } from '$app/server';
 import { page } from '$app/state';
 
-
 import {
 	normalizeBearerToken,
 	getCurrentSite,
@@ -12,7 +11,7 @@ import {
 	getValidSiteDetectionMode
 } from '@query-api/js';
 
-import type {SiteDetectionMode} from '@query-api/js'
+import type { SiteDetectionMode } from '@query-api/js';
 import { SvelteURL, SvelteURLSearchParams } from 'svelte/reactivity';
 
 /**
@@ -29,57 +28,52 @@ export function getCraftAuthToken() {
 }
 
 export function getCraftCurrentSite() {
-  const { siteMap, siteDetectionMode } = getQueryApiConfig()
-  if (!siteMap || siteMap.length === 0) {
-    throw new Error('Invalid sitemap configuration in nuxt.config.ts')
-  }
+	const { siteMap, siteDetectionMode } = getQueryApiConfig();
+	if (!siteMap || siteMap.length === 0) {
+		throw new Error('Invalid sitemap configuration in nuxt.config.ts');
+	}
 
-	const validSiteDetectionMode = getValidSiteDetectionMode(siteDetectionMode)
-  const url = getUrlByMode(validSiteDetectionMode)
-  return getCurrentSite(siteMap, url, validSiteDetectionMode)
+	const validSiteDetectionMode = getValidSiteDetectionMode(siteDetectionMode);
+	const url = getUrlByMode(validSiteDetectionMode);
+	return getCurrentSite(siteMap, url, validSiteDetectionMode);
 }
 
 export function getCraftUri() {
-  const { siteDetectionMode } = getQueryApiConfig()
-	const validSiteDetectionMode = getValidSiteDetectionMode(siteDetectionMode)
-  const currentSite = getCraftCurrentSite()
-  const url = getUrlByMode(validSiteDetectionMode)
-  return getSiteUri(url, currentSite, validSiteDetectionMode)
+	const { siteDetectionMode } = getQueryApiConfig();
+	const validSiteDetectionMode = getValidSiteDetectionMode(siteDetectionMode);
+	const currentSite = getCraftCurrentSite();
+	const url = getUrlByMode(validSiteDetectionMode);
+	return getSiteUri(url, currentSite, validSiteDetectionMode);
 }
 
-
 function getUrlByMode(mode: SiteDetectionMode) {
-	const url = getEffectiveUrl()
-  return mode === SITE_DETECTION_MODES.PATH ? url.pathname : url.href
+	const url = getEffectiveUrl();
+	return mode === SITE_DETECTION_MODES.PATH ? url.pathname : url.href;
 }
 
 export function getEffectiveUrl() {
-  if (browser) {
-    return new SvelteURL(page.url.href);
-  }
+	if (browser) {
+		return new SvelteURL(page.url.href);
+	}
 
-  const evt = getRequestEvent();
-  if (evt) return evt.url;
+	const evt = getRequestEvent();
+	if (evt) return evt.url;
 
-  throw new Error(
-    'No URL available outside of a request context.'
-  );
+	throw new Error('No URL available outside of a request context.');
 }
 
 export function getSearchParamsAsRecords() {
-  const params = getSearchParams()
-  return Object.fromEntries(params?.entries())
+	const params = getSearchParams();
+	return Object.fromEntries(params?.entries());
 }
 
 function getSearchParams() {
-  if (browser) {
-    return new SvelteURLSearchParams(window.location.search);
-  }
+	if (browser) {
+		return new SvelteURLSearchParams(window.location.search);
+	}
 
-  const evt = getRequestEvent();
-  if (evt) return evt.url.searchParams;
+	const evt = getRequestEvent();
+	if (evt) return evt.url.searchParams;
 
-  throw new Error(
-    'No URL available outside of a request context.'
-  );
+	throw new Error('No URL available outside of a request context.');
 }

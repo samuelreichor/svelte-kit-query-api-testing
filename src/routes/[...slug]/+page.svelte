@@ -10,4 +10,4 @@
 	{JSON.stringify(data.page, null, 2)}
 </pre>
 
-<RelatedNews/>
+<RelatedNews />
