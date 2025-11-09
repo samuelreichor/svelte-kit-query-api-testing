@@ -14,19 +14,22 @@ export type CraftAreaComponent = {
 
 export type HandledErrorCodes = '404' | '500';
 
-export type ContentMapping = {
-	pages: Prettify<
-		{
-			[key: string]: Component;
-		} & {
-			[K in `page${HandledErrorCodes}`]?: Component;
-		} & {
-			error?: Component;
-		}
-	>;
-	components: {
+export type PageMapping = Prettify<
+	{
 		[key: string]: Component;
-	};
+	} & {
+		Page404?: Component;
+		Error?: Component;
+	}
+>;
+
+export type ComponentMapping = {
+	[key: string]: Component;
+};
+
+export type ContentMapping = {
+	pages: PageMapping;
+	components?: ComponentMapping;
 };
 
 export type CraftOptions = {

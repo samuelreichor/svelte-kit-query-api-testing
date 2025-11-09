@@ -1,13 +1,25 @@
 <script lang="ts">
-	import RelatedNews from './RelatedNews.svelte';
+	import CraftPage from '$lib/components/CraftPage.svelte';
+	import CraftNotImplemented from '$lib/components/CraftNotImplemented.svelte';
+	import Home from '$lib/content/pages/Home.svelte';
+	import HeadlineBlock from '$lib/content/blocks/HeadlineBlock.svelte';
 
 	const { data } = $props();
+
+	const config = {
+		pages: {
+			home: Home,
+			news: CraftNotImplemented
+		},
+		components: {
+			headline: HeadlineBlock,
+			imageText: CraftNotImplemented,
+			hyperLink: CraftNotImplemented,
+			link: CraftNotImplemented
+		}
+	};
 </script>
 
-<h1>{data.page.title}</h1>
-
-<pre>
-	{JSON.stringify(data.page, null, 2)}
-</pre>
-
-<RelatedNews />
+<div>
+	<CraftPage content={data.page} {config} />
+</div>
